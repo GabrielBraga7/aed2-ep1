@@ -42,15 +42,10 @@ typedef struct PILHA{
 void addPilha(PILHA* f, int v){ //adiciona um novo NO no fim da PILHA
     
     NOF* novoFim = (NOF*) malloc(sizeof(NOF));
+    
     novoFim->v = v;
 
-    if(f->fim){
-        novoFim->ant = f->fim;
-    }
-
-    else{ 
-        novoFim->ant = NULL; 
-    }
+    novoFim->ant = f->fim;
     
     f->fim = novoFim;
 }
@@ -58,13 +53,14 @@ void addPilha(PILHA* f, int v){ //adiciona um novo NO no fim da PILHA
 void removeFinal(PILHA* f){
     if(!f->fim)
         return;
+
     NOF* fim = f->fim;
     f->fim = fim->ant;
     free(fim);
 
 }
 
-bool adicionaNOInicio(NO** v, int valor){ //adiciona um NO no inicio da lista ligada de NO's
+bool adicionaNoInicio(NO** v, int valor){ //adiciona um NO no inicio da lista ligada de NO's
     if(!v)
         return false;
     NO* novo = (NO*) malloc(sizeof(NO));
@@ -90,13 +86,7 @@ void percorreProfundidade(VERTICE* g, int i, int destino, int vertices, bool fla
 
         while (atual)
         {
-            NO* antigoInicio = (*caminhos);
-
-            NO* novo = (NO*) malloc(sizeof(NO));
-            novo->v = atual->v;
-            novo->prox = antigoInicio;
-
-            (*caminhos) = novo;
+            adicionaNoInicio(caminhos, atual->v);
 
             atual = atual->ant;
         }
