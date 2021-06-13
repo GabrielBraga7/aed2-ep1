@@ -142,3 +142,153 @@ NO* caminhos_max_d(VERTICE* g, int n, int x, int y, int d)
 
 
 
+
+void inicializaGrafo(VERTICE** g, int N){
+    *g = (VERTICE*) malloc(sizeof(VERTICE)*N);
+
+    for(int i = 0; i < N; i++){
+        ((*g)[i]).inicio = NULL;
+    }
+}
+bool adicionaVertice (VERTICE** v, int remetente, int valor) {
+    if(!v)
+        return false;
+    NO* inicio = (*v)[remetente].inicio;
+    NO* novo = (NO*) malloc(sizeof(NO));
+    novo->prox = inicio;
+    novo->v = valor;
+    ((*v)[remetente]).inicio = novo;
+    return true;
+}
+void imprimeGrafo(VERTICE* inicio, int T){
+    VERTICE* p = inicio;
+    for(int i = 0; i < T; i++){
+        printf("%d:",i);
+        NO* a = p[i].inicio;
+        while(a){
+            printf("%d ", a->v);
+            a = a->prox;
+        }
+        printf("\n");
+    }
+}
+
+void GRAPHrandER(VERTICE** grafo, int V, int A) { 
+   srand(9074);
+   double prob = (double) A / (V*(V-1));
+   inicializaGrafo(grafo, V);
+   for (int v = 1; v < V; ++v)
+      for (int w = 1; w < V; ++w)
+         if (v != w)
+            if (rand( ) < prob*(RAND_MAX+1.0))
+               adicionaVertice( grafo, v, w);
+}
+
+void teste1(){
+    VERTICE* grafo;
+    int tamanho = 6;
+    inicializaGrafo(&grafo, tamanho);
+    adicionaVertice(&grafo, 1, 2);
+    //adicionaVertice(&grafo, 2, 1);
+    adicionaVertice(&grafo, 1, 3);
+    //adicionaVertice(&grafo, 3, 1);
+    adicionaVertice(&grafo, 3, 2);
+    //adicionaVertice(&grafo, 2, 3);
+    adicionaVertice(&grafo, 3, 5);
+    //adicionaVertice(&grafo, 5, 3);
+    adicionaVertice(&grafo, 4, 2);
+    //adicionaVertice(&grafo, 2, 4);
+    adicionaVertice(&grafo, 4, 3);
+    //adicionaVertice(&grafo, 3, 4);
+    adicionaVertice(&grafo, 5, 4);
+    //adicionaVertice(&grafo, 4, 5);
+    //adicionaVertice(&grafo, 2, 6);
+    //adicionaVertice(&grafo, 6, 7);
+    //adicionaVertice(&grafo, 7, 0);
+	imprimeGrafo(grafo, tamanho);
+	NO* resp = caminhos_max_d(grafo, tamanho, 1, 2, 3);
+    NO* atual = resp;
+    printf("\n\n");
+    while(atual){
+        printf("%d,",atual->v);
+        NO* temp = atual;
+        atual = atual->prox;
+        free(temp);
+    }
+}
+
+void teste2(){
+    VERTICE* grafo;
+    int tamanho = 6;
+    inicializaGrafo(&grafo, tamanho);
+    adicionaVertice(&grafo, 1, 2);
+    adicionaVertice(&grafo, 1, 3);
+    adicionaVertice(&grafo, 1, 4);
+    adicionaVertice(&grafo, 1, 5);
+
+    adicionaVertice(&grafo, 2, 1);
+    adicionaVertice(&grafo, 2, 3);
+    adicionaVertice(&grafo, 2, 4);
+    adicionaVertice(&grafo, 2, 5);
+
+    adicionaVertice(&grafo, 3, 1);
+    adicionaVertice(&grafo, 3, 2);
+    adicionaVertice(&grafo, 3, 5);
+
+    adicionaVertice(&grafo, 4, 1);
+    adicionaVertice(&grafo, 4, 2);
+    adicionaVertice(&grafo, 4, 5);
+
+    adicionaVertice(&grafo, 5, 2);
+    adicionaVertice(&grafo, 5, 3);
+    adicionaVertice(&grafo, 5, 4);
+
+	imprimeGrafo(grafo, tamanho);
+	NO* resp = caminhos_max_d(grafo, tamanho, 1, 2, 3);
+    NO* atual = resp;
+    printf("\n\n");
+    while(atual){
+        printf("%d,",atual->v);
+        NO* temp = atual;
+        atual = atual->prox;
+        free(temp);
+    }
+
+}
+void teste3(){
+    VERTICE* grafo;
+    int tamanho = 7;
+    GRAPHrandER(&grafo, tamanho, 20);
+    imprimeGrafo(grafo, tamanho);
+	NO* resp = caminhos_max_d(grafo, tamanho, 2, 1, 3);
+    NO* atual = resp;
+    printf("\n\n");
+    while(atual){
+        printf("%d,",atual->v);
+        NO* temp = atual;
+        atual = atual->prox;
+        free(temp);
+    }
+
+}
+//---------------------------------------------------------
+// use main() para fazer chamadas de teste ao seu programa
+// mas nao entregue o codido de main() nem inclua nada
+// abaixo deste ponto
+//---------------------------------------------------------
+int main()
+{
+	if (nroUSP()==0) printf("\n\nNro USP nao informado!!!\n\n");
+    //teste1();
+    //printf("\n");
+    //teste2();
+    //printf("\n");
+    teste3();
+
+	// crie um grafo de teste aqui
+	// chame a funcao caminhos_max_d implementada
+	// verifique se a lista retornada está correta
+    return 0;
+}
+
+
