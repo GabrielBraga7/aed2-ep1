@@ -27,35 +27,25 @@ typedef struct {
 	NO* inicio;
 } VERTICE;
 
-typedef struct NOF{
-    NOF* ant;
-    int v;
-}NOF;
-
-//estrutura de PILHA auxiliar, usada para a busca em largura
-typedef struct PILHA{
-    NOF* fim;
-}PILHA;
 
 
-
-void addPilha(PILHA* f, int v){ //adiciona um novo NO no fim da PILHA
+void addPilha(VERTICE* f, int v){ //adiciona um novo NO no fim da PILHA
     
-    NOF* novoFim = (NOF*) malloc(sizeof(NOF));
+    NO* novoFim = (NO*) malloc(sizeof(NO));
     
     novoFim->v = v;
 
-    novoFim->ant = f->fim;
+    novoFim->prox = f->inicio;
     
-    f->fim = novoFim;
+    f->inicio = novoFim;
 }
 
-void removeFinal(PILHA* f){
-    if(!f->fim)
+void removeFinal(VERTICE* f){
+    if(!f->inicio)
         return;
 
-    NOF* fim = f->fim;
-    f->fim = fim->ant;
+    NO* fim = f->inicio;
+    f->inicio = fim->prox;
     free(fim);
 
 }
@@ -72,7 +62,7 @@ bool adicionaNoInicio(NO** v, int valor){ //adiciona um NO no inicio da lista li
 
 
 
-void percorreProfundidade(VERTICE* g, int i, int destino, int vertices, bool flag[], int maxVer, NO** caminhos, PILHA* caminhoAtual){
+void percorreProfundidade(VERTICE* g, int i, int destino, int vertices, bool flag[], int maxVer, NO** caminhos, VERTICE* caminhoAtual){
     
     ++vertices;
 
@@ -82,13 +72,13 @@ void percorreProfundidade(VERTICE* g, int i, int destino, int vertices, bool fla
 
     if(i == destino){
 
-        NOF* atual = caminhoAtual->fim;
+        NO* atual = caminhoAtual->inicio;
 
         while (atual)
         {
             adicionaNoInicio(caminhos, atual->v);
 
-            atual = atual->ant;
+            atual = atual->prox;
         }
         flag[i] = false;
         removeFinal(caminhoAtual);
@@ -137,9 +127,9 @@ NO* caminhos_max_d(VERTICE* g, int n, int x, int y, int d)
         flag[i] = false;
     }
 	
-    PILHA* f = (PILHA*) malloc(sizeof(PILHA)); //cria estrutura auxiliar de PILHA para busca em profundidade
+    VERTICE* f = (VERTICE*) malloc(sizeof(VERTICE)); //cria estrutura auxiliar que funciona como uma pilha para busca em profundidade
 
-    f->fim = NULL;
+    f->inicio = NULL;
 
     flag[x] = true;//marca como visitado
 
@@ -184,6 +174,7 @@ void imprimeGrafo(VERTICE* inicio, int T){
 }
 
 void GRAPHrandER(VERTICE** grafo, int V, int A) { 
+   srand(9074);
    double prob = (double) A / (V*(V-1));
    inicializaGrafo(grafo, V);
    for (int v = 1; v < V; ++v)
@@ -266,10 +257,10 @@ void teste2(){
 }
 void teste3(){
     VERTICE* grafo;
-    int tamanho = 8;
+    int tamanho = 7;
     GRAPHrandER(&grafo, tamanho, 20);
     imprimeGrafo(grafo, tamanho);
-	NO* resp = caminhos_max_d(grafo, tamanho, 5, 6, 4);
+	NO* resp = caminhos_max_d(grafo, tamanho, 2, 1, 3);
     NO* atual = resp;
     printf("\n\n");
     while(atual){
@@ -288,10 +279,10 @@ void teste3(){
 int main()
 {
 	if (nroUSP()==0) printf("\n\nNro USP nao informado!!!\n\n");
-    teste1();
-    printf("\n");
-    teste2();
-    printf("\n");
+    //teste1();
+    //printf("\n");
+    //teste2();
+    //printf("\n");
     teste3();
 
 	// crie um grafo de teste aqui

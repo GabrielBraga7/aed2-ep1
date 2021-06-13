@@ -1,2 +1,7 @@
 .vscode/
 *.exe
+*.txt
+*.dot
+*.png
+ep1_test.cpp
+*.pdf
